@@ -7,6 +7,7 @@ Gem::Specification.new do |s|
   s.rdoc_options += ["--quiet", '--inline-source', '--line-numbers', '--title', 'deprecate_public: Warn when calling private methods via public interface', '--main', 'README.rdoc']
   s.summary = "Warn when calling private methods via public interface"
   s.description = s.summary
+  s.license = 'MIT'
   s.author = "Jeremy Evans"
   s.email = "code@jeremyevans.net"
   s.homepage = "https://github.com/jeremyevans/ruby-deprecate_public"
