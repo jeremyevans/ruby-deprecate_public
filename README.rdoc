@@ -1,0 +1,76 @@
+= ruby-deprecate_public
+
+ruby-deprecate_public exists so that library authors can take an
+existing public method in one of their classes, and make it a
+private method, but still allow it to be called as a public method,
+emitting a warning if called as a public method.
+
+== Usage
+
+=== Basic
+
+  require 'deprecate_public'
+  class Foo
+    private
+
+    def meth
+      :return_value
+    end
+  end
+
+  foo = Foo.new
+
+  foo.send(:meth)
+  # => :return_value
+
+  foo.meth
+  # raises NoMethodError: private method `meth' called for ...
+
+  Foo.deprecate_public :meth
+  foo.meth
+  # warning emitting: "calling Foo#meth using deprecated public interface"
+  # => :return_value
+
+=== Arguments
+
+  # Deprecate multiple methods at once
+  deprecate_public([:meth1, :meth2])
+
+  # Override message
+  deprecate_public(:meth1, "meth1 is private method, stop calling it!")
+
+== Design
+
+deprecate_public works by overriding method_missing, which is called
+if you call a private method with a specified receiver.  That's one
+of the reasons calling a private method raises NoMethodError instead
+of MethodVisibilityError or something like that.
+
+== Caveats
+
+While you can call +deprecate_public+ on a Module, you should only do so
+if the module has not been included in another Module or Class, as when
+called on a module it only affects future cases where the module was
+included in a class.
+
+== Installation
+
+ruby-deprecate_public is distributed as a gem, and can be installed with:
+
+  gem install deprecate_public
+
+== Source
+
+ruby-deprecate_public is hosted on GitHub:
+
+  https://github.com/jeremyevans/ruby-deprecate_public
+
+== Issues
+
+ruby-deprecate_public uses GitHub Issues for issue tracking:
+
+  https://github.com/jeremyevans/ruby-deprecate_public/issues
+
+== Author
+
+Jeremy Evans <code@jeremyevans.net>
