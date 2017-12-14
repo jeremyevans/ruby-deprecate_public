@@ -9,7 +9,7 @@ class Module
         if RUBY_VERSION >= '2.5'
           Kernel.warn(msg, :uplevel => 1)
         else
-          Kernel.warn(msg)
+          Kernel.warn("#{caller(1,1)[0].sub(/in `.*'\z/, '')} warning: #{msg}")
         end
 
         send(meth, *args, &block)
