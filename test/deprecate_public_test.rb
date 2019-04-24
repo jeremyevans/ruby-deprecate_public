@@ -6,7 +6,11 @@ require 'minitest/autorun'
 warnings = []
 (class << Kernel; self; end).module_eval do
   define_method(:warn) do |*args|
-    warnings << args.first
+    warnings << if args.last == {:uplevel => 1}
+      args.first
+    else
+      args.first.sub(/\A.+warning: (.+)\z/, '\1')
+    end
   end
 end
 

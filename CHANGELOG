@@ -1,3 +1,7 @@
+=== master
+
+* Work on Ruby 1.8+, fix tests on Ruby 2.0-2.4 (jeremyevans)
+
 === 1.0.0 (2017-12-13)
 
 * Initial public release

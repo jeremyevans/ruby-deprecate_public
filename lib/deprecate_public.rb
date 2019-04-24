@@ -2,14 +2,16 @@ class Module
   module DeprecatePublic
     # Handle calls to methods where +deprecate_public+ has been called
     # for the method, printing the warning and then using +send+ to
-    #invoke the method.
+    # invoke the method.
     def method_missing(meth, *args, &block)
       check_meth = "_deprecated_public_message_#{meth}"
       if respond_to?(meth, true) && respond_to?(check_meth, true) && (msg = send(check_meth))
         if RUBY_VERSION >= '2.5'
           Kernel.warn(msg, :uplevel => 1)
-        else
+        elsif RUBY_VERSION >= '2.0'
           Kernel.warn("#{caller(1,1)[0].sub(/in `.*'\z/, '')} warning: #{msg}")
+        else
+          Kernel.warn("#{caller(1)[0].sub(/in `.*'\z/, '')} warning: #{msg}")
         end
 
         send(meth, *args, &block)
