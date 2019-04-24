@@ -1,4 +1,6 @@
-=== master
+=== 1.1.0 (2019-04-24)
+
+* Add Module#deprecate_public_constant on Ruby 2.6+ (jeremyevans)
 
 * Work on Ruby 1.8+, fix tests on Ruby 2.0-2.4 (jeremyevans)
 

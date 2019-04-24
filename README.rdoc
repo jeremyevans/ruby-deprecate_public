@@ -5,6 +5,10 @@ existing public method in one of their classes, and make it a
 private method, but still allow it to be called as a public method,
 emitting a warning if called as a public method.
 
+On Ruby 2.6+, you can also take an existing public constant,
+make it a private constant, but still allow it to be accessed as a
+public constant, emitting a warning if accessed as a public constant.
+
 == Usage
 
 === Basic
@@ -31,6 +35,21 @@ emitting a warning if called as a public method.
   # warning emitting: "calling Foo#meth using deprecated public interface"
   # => :return_value
 
+  ## Ruby 2.6+: Deprecating Constants
+
+  class Foo
+    BAR = 1
+    private_constant :BAR
+  end
+
+  Foo::BAR
+  # raises NameError: private constant Foo::BAR referenced
+
+  Foo.deprecate_public_constant :Bar
+  Foo::BAR
+  # warning emitting: "accessing Foo::BAR using deprecated public interface"
+  # => 1
+
 === Arguments
 
   # Deprecate multiple methods at once
@@ -39,19 +58,26 @@ emitting a warning if called as a public method.
   # Override message
   deprecate_public(:meth1, "meth1 is private method, stop calling it!")
 
+  # Ruby 2.6+: deprecate_public_constant uses same interface
+
 == Design
 
-deprecate_public works by overriding method_missing, which is called
++deprecate_public+ works by overriding +method_missing+, which is called
 if you call a private method with a specified receiver.  That's one
-of the reasons calling a private method raises NoMethodError instead
-of MethodVisibilityError or something like that.
+of the reasons calling a private method raises +NoMethodError+ instead
+of +MethodVisibilityError+ or something like that.
+
+On Ruby 2.6+, +deprecate_public_constant+ works by overriding
++const_missing+, which is called if you access a constant using the
+public interface (<tt>Foo::BAR</tt> in the above example).
 
 == Caveats
 
 While you can call +deprecate_public+ on a Module, you should only do so
 if the module has not been included in another Module or Class, as when
 called on a module it only affects future cases where the module was
-included in a class.
+included in a class.  The same is true for +deprecate_public_constant+
+on Ruby 2.6+..
 
 == Installation
 

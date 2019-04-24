@@ -37,4 +37,38 @@ class Module
 
     nil
   end
+
+  if RUBY_VERSION >= '2.6'
+    module DeprecatePublicConstant
+      # Handle access to constants where +deprecate_public_constant+ has been called
+      # for the constant, printing the warning and then using +const_get+ to
+      # access the constant.
+      def const_missing(const)
+        check_meth = "_deprecated_public_constant_message_#{const}"
+        if const_defined?(const, true) && respond_to?(check_meth, true) && (msg = send(check_meth))
+          Kernel.warn(msg, :uplevel => 1)
+          const_get(const, true)
+        else
+          super
+        end
+      end
+    end
+
+    # Allow but deprecate public constant access to +const+, if +const+ is
+    # a private constant.  +const+ can be an array of method name strings
+    # or symbols to handle multiple methods at once.  If +msg+ is specified,
+    # it can be used to customize the warning printed.
+    def deprecate_public_constant(const, msg=nil)
+      extend DeprecatePublicConstant
+
+      Array(const).each do |c|
+        message = (msg || "accessing #{name}::#{c} using deprecated public interface").dup.freeze
+        message_meth = :"_deprecated_public_constant_message_#{c}"
+        define_singleton_method(message_meth){message}
+        singleton_class.send(:private, message_meth)
+      end
+
+      nil
+    end
+  end
 end
