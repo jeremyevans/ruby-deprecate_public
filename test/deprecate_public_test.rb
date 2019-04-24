@@ -1,5 +1,6 @@
 require File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), 'lib', 'deprecate_public')
 require 'rubygems'
+ENV['MT_NO_PLUGINS'] = '1' # Work around stupid autoloading of plugins
 gem 'minitest'
 require 'minitest/autorun'
 
