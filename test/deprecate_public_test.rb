@@ -2,7 +2,7 @@ require File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), 'lib',
 require 'rubygems'
 ENV['MT_NO_PLUGINS'] = '1' # Work around stupid autoloading of plugins
 gem 'minitest'
-require 'minitest/autorun'
+require 'minitest/global_expectations/autorun'
 
 warnings = []
 (class << Kernel; self; end).module_eval do
