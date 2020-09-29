@@ -73,11 +73,15 @@ public interface (<tt>Foo::BAR</tt> in the above example).
 
 == Caveats
 
-While you can call +deprecate_public+ on a Module, you should only do so
-if the module has not been included in another Module or Class, as when
-called on a module it only affects future cases where the module was
-included in a class.  The same is true for +deprecate_public_constant+
-on Ruby 2.6+..
+Before Ruby 3, while you can call +deprecate_public+ on a Module, you should
+only do so if the module has not been included in another Module or Class, as
+when called on a module it only affects future cases where the module was
+included in a class.
+
+While you can call +deprecate_public_constant+ on a Module, you should
+only do so if the module has not been included in another Module or Class, as
+when called on a module it only affects future cases where the module was
+included in a class, even in Ruby 3.
 
 == Installation
 
