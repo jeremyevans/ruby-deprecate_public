@@ -6,6 +6,7 @@ require 'minitest/global_expectations/autorun'
 
 warnings = []
 (class << Kernel; self; end).module_eval do
+  alias warn warn
   define_method(:warn) do |*args|
     warnings << if args.last == {:uplevel => 1}
       args.first

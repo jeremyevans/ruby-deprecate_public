@@ -13,7 +13,7 @@ end
 
 desc "Run specs"
 task :test do
-  sh "#{FileUtils::RUBY} -v test/deprecate_public_test.rb"
+  sh "#{FileUtils::RUBY} -w test/deprecate_public_test.rb"
 end
 task :default=>[:test]
 
