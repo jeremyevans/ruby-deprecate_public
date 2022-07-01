@@ -8,10 +8,12 @@ class Module
       if respond_to?(meth, true) && respond_to?(check_meth, true) && (msg = send(check_meth))
         if RUBY_VERSION >= '2.5'
           Kernel.warn(msg, :uplevel => 1)
+        # :nocov:
         elsif RUBY_VERSION >= '2.0'
           Kernel.warn("#{caller(1,1)[0].sub(/in `.*'\z/, '')} warning: #{msg}")
         else
           Kernel.warn("#{caller(1)[0].sub(/in `.*'\z/, '')} warning: #{msg}")
+        # :nocov:
         end
 
         send(meth, *args, &block)
@@ -38,7 +40,9 @@ class Module
     nil
   end
 
+  # :nocov:
   if RUBY_VERSION >= '2.6'
+  # :nocov:
     module DeprecatePublicConstant
       # Handle access to constants where +deprecate_public_constant+ has been called
       # for the constant, printing the warning and then using +const_get+ to
