@@ -10,6 +10,6 @@ Gem::Specification.new do |s|
   s.author = "Jeremy Evans"
   s.email = "code@jeremyevans.net"
   s.homepage = "https://github.com/jeremyevans/ruby-deprecate_public"
-  s.files = %w(MIT-LICENSE CHANGELOG README.rdoc Rakefile) + Dir["{lib,test}/deprecate_public*.rb"]
-  .add_development_dependency "minitest-global_expectations"
+  s.files = %w(MIT-LICENSE CHANGELOG README.rdoc) + Dir["lib/deprecate_public.rb"]
+  s.add_development_dependency "minitest-global_expectations"
 end
