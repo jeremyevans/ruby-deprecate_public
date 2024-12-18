@@ -11,7 +11,7 @@ end
 
 desc "Run specs"
 task :test do
-  sh "#{FileUtils::RUBY} -w test/deprecate_public_test.rb"
+  sh "#{FileUtils::RUBY} -w #{'-W:strict_unused_block' if RUBY_VERSION >= '3.4'} test/deprecate_public_test.rb"
 end
 task :default=>[:test]
 
