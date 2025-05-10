@@ -1,12 +1,27 @@
 require "rake/clean"
-require "rdoc/task"
 
 CLEAN.include ["*.gem", "rdoc", "coverage"]
 
-RDoc::Task.new do |rdoc|
-  rdoc.rdoc_dir = "rdoc"
-  rdoc.options += ['--inline-source', '--line-numbers', '--title', 'deprecate_public: Warn when calling private methods via public interface', '--main', 'README.rdoc', '-f', 'hanna']
-  rdoc.rdoc_files.add %w"lib/deprecate_public.rb MIT-LICENSE CHANGELOG README.rdoc"
+desc "Generate rdoc"
+task :rdoc do
+  rdoc_dir = "rdoc"
+  rdoc_opts = ["--line-numbers", "--inline-source", '--title', 'deprecate_public: Warn when calling private methods via public interface']
+
+  begin
+    gem 'hanna'
+    rdoc_opts.concat(['-f', 'hanna'])
+  rescue Gem::LoadError
+  end
+
+  rdoc_opts.concat(['--main', 'README.rdoc', "-o", rdoc_dir] +
+    %w"README.rdoc CHANGELOG MIT-LICENSE" +
+    Dir["lib/**/*.rb"]
+  )
+
+  FileUtils.rm_rf(rdoc_dir)
+
+  require "rdoc"
+  RDoc::RDoc.new.document(rdoc_opts)
 end
 
 desc "Run specs"
